@@ -1,3 +1,24 @@
+const OrderButton = React.createClass({
+  render: function () {
+    return(
+      <span>
+        <div className="ui animated basic grey button">
+          <div className="visible content">Order Asc</div>
+          <div className="hidden content">
+            <i className="angle double up icon"></i>
+          </div>
+        </div>
+        <div className="ui animated basic grey button">
+          <div className="visible content">Order Desc</div>
+          <div className="hidden content">
+            <i className="angle double down icon"></i>
+          </div>
+        </div>
+      </span>
+    )
+  }
+});
+
 const ProductList = React.createClass({
     getInitialState: function () {
         return {
@@ -13,13 +34,22 @@ const ProductList = React.createClass({
         });
         this.setState({ products: products });
     },
-    handleProductUpVote: function (productId) {
+    handleProductUpVote: function (productId, title) {
         Data.forEach((el) => {
             if (el.id === productId) {
                 el.votes = el.votes + 1;
                 return;
             }
-        });
+        })
+        this.updateState();
+    },
+    handleProductDownVote: function (productId, title) {
+        Data.forEach((el) => {
+            if (el.id === productId) {
+                el.votes = el.votes - 1;
+                return;
+            }
+        })
         this.updateState();
     },
     render: function () {
@@ -34,21 +64,25 @@ const ProductList = React.createClass({
                     votes={product.votes}
                     submitter_avatar_url={product.submitter_avatar_url}
                     product_image_url={product.product_image_url}
-                    onVote={this.handleProductUpVote}
+                    onUpVote={this.handleProductUpVote}
+                    onDownVote={this.handleProductDownVote}
                 />
-            );
+            )
         });
         return (
             <div className='ui items'>
                 {products}
             </div>
-        );
-    },
+        )
+    }
 });
 
 const Product = React.createClass({
     handleUpVote: function () {
-        this.props.onVote(this.props.id);
+        this.props.onUpVote(this.props.id);
+    },
+    handleDownVote: function () {
+        this.props.onDownVote(this.props.id)
     },
     render: function () {
         return (
@@ -60,6 +94,9 @@ const Product = React.createClass({
                     <div className='header'>
                         <a onClick={this.handleUpVote}>
                             <i className='large caret up icon'></i>
+                        </a>
+                        <a onClick={this.handleDownVote}>
+                            <i className='large caret down icon'></i>
                         </a>
                         {this.props.votes}
                     </div>
@@ -79,8 +116,13 @@ const Product = React.createClass({
             </div>
 
         );
-    },
+    }
 });
+
+ReactDom.render(
+    <OrderButton />,
+    document.getElementById("orderButton")
+);
 
 ReactDOM.render(
     <ProductList />,
