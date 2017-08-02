@@ -95,10 +95,11 @@ const Product = React.createClass({
                         <a onClick={this.handleUpVote}>
                             <i className='large caret up icon'></i>
                         </a>
+                        {this.props.votes}
                         <a onClick={this.handleDownVote}>
                             <i className='large caret down icon'></i>
                         </a>
-                        {this.props.votes}
+
                     </div>
                     <div className='description'>
                         <a href={this.props.url}>
@@ -116,12 +117,12 @@ const Product = React.createClass({
             </div>
 
         );
-    }
+    },
 });
 
-ReactDom.render(
+ReactDOM.render(
     <OrderButton />,
-    document.getElementById("orderButton")
+    document.getElementById('orderButton')
 );
 
 ReactDOM.render(
